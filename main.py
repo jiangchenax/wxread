@@ -24,7 +24,7 @@ env_method = os.getenv('PUSH_METHOD')
 
 headers = json.loads(json.dumps(eval(env_headers))) if env_headers else local_headers
 cookies = json.loads(json.dumps(eval(env_cookies))) if env_cookies else local_cookies
-number = int(env_num) if env_num not in (None, '') else 120
+number = int(env_num) if env_num not in (None, '') else 1
 
 
 def encode_data(data):
