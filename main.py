@@ -67,7 +67,7 @@ while True:
     print(f"s:{data['s']}")
 
     sendData = json.dumps(data, separators=(',', ':'))
-    response = requests.post(url, headers=headers, cookies=cookies, data=sendData)
+    response = requests.post(RENEW_URL, headers=headers, cookies=cookies, data=sendData)
     resData = response.json()
     print(response.json())
 
