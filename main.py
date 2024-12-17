@@ -61,7 +61,7 @@ while True:
     data['ct'] = int(time.time())
     data['ts'] = int(time.time() * 1000)
     data['rn'] = random.randint(0, 1000)  # 1000以内的随机整数值
-    data['sg'] = hashlib.sha256(("" + str(data['ts']) + str(data['rn']) + key).encode()).hexdigest()
+    data['sg'] = hashlib.sha256(("" + str(data['ts']) + str(data['rn']) + KEY).encode()).hexdigest()
     print(f"sg:{data['sg']}")
     data['s'] = cal_hash(encode_data(data))
     print(f"s:{data['s']}")
