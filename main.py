@@ -13,6 +13,7 @@ KEY = "3c5c8717f3daf09iop3423zafeqoi"
 READ_URL = "https://weread.qq.com/web/book/read"
 RENEW_URL = "https://weread.qq.com/web/login/renewal"
 COOKIE_DATA = {"rq": "%2Fweb%2Fbook%2Fread"}
+num = 1
 
 # github action部署用
 # 从环境变量获取 headers、cookies等值(如果不存在使用默认本地值)
