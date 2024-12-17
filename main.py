@@ -54,47 +54,36 @@ def get_wr_skey():
     return None
 
 
-index = 1
-while index <= number:
+while True:
+    # 处理数据（后端只需要ct字段和s字段正确即可）
+    print(f"-------------------第{num}次，共阅读{num * 0.5}分钟-------------------")
     data['ct'] = int(time.time())
     data['ts'] = int(time.time() * 1000)
-    data['rn'] = random.randint(0, 1000)
-    data['sg'] = hashlib.sha256(f"{data['ts']}{data['rn']}{KEY}".encode()).hexdigest()
+    data['rn'] = random.randint(0, 1000)  # 1000以内的随机整数值
+    data['sg'] = hashlib.sha256(("" + str(data['ts']) + str(data['rn']) + key).encode()).hexdigest()
+    print(f"sg:{data['sg']}")
     data['s'] = cal_hash(encode_data(data))
+    print(f"s:{data['s']}")
 
-    print(f"\n尝试第 {index} 次阅读...")
-    response = requests.post(READ_URL, headers=headers, cookies=cookies, data=json.dumps(data, separators=(',', ':')))
+    sendData = json.dumps(data, separators=(',', ':'))
+    response = requests.post(url, headers=headers, cookies=cookies, data=sendData)
     resData = response.json()
-    print(resData)
+    print(response.json())
 
     if 'succ' in resData:
-        index += 1
+        print("数据格式正确，阅读进度有效！")
+        num += 1
         time.sleep(30)
-        print(f"✅ 阅读成功，阅读进度：{index * 0.5} 分钟")
-
     else:
-        print("❌ cookie 已过期，尝试刷新...")
-        new_skey = get_wr_skey()
-        if new_skey:
-            cookies['wr_skey'] = new_skey
-            print(f"✅ 密钥刷新成功，新密钥：{new_skey}\n🔄 重新本次阅读。")
-        else:
-            print("⚠ 无法获取新密钥，终止运行。")
-            break
+        print("数据格式问题,尝试初始化cookie值")
+        cookies['wr_skey'] = get_wr_skey()
+        num -= 1
 
+    PUSHPLUS_TOKEN = os.getenv("PUSHPLUS_TOKEN")
+    # 每一次代表30秒，比如你想刷1个小时这里填120，你只需要签到这里填2次
+    if num == 120:
+        print("阅读脚本运行已完成！")
+        push("阅读脚本运行已完成！", method="pushplus", pushplus_token=PUSHPLUS_TOKEN)
+        break
+    # 确认无s字段
     data.pop('s')
-
-print("🎉 阅读脚本已完成！")
-if env_method not in (None, ''):
-    completed = index - 1  # 实际完成的次数
-    total_time = completed * 0.5  # 阅读时长（分钟）
-    completion_rate = (completed / number) * 100  # 完成率
-
-    message = (
-        "微信读书自动阅读完成！\n"
-        f"📚 目标次数：{number}次\n"
-        f"✅ 成功次数：{completed}次\n"
-        f"💯 完成率：{completion_rate:.1f}%\n"
-        f"⏱️ 阅读时长：{total_time}分钟"
-    )
-    push(message, env_method)
