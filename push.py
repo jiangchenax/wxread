@@ -49,7 +49,7 @@ class PushNotification:
             logger.error("Telegram通知发送失败: %s", str(e))
             return False
 
-def push(content, method, pushplus_token=SCT265376TRNcuUaqhnEwPylz6lxaLukBM):
+def push(content, method, pushplus_token=None):
     """
     统一推送接口
     """
