@@ -49,7 +49,7 @@ class PushNotification:
             logger.error("Telegram通知发送失败: %s", str(e))
             return False
 
-def push(content, method=os.getenv("pushplus", "将此处修改为/telegram"), pushplus_token=SCT265376TRNcuUaqhnEwPylz6lxaLukBM, telegram_bot_token=None, telegram_chat_id=None):
+def push(content, method, pushplus_token=SCT265376TRNcuUaqhnEwPylz6lxaLukBM, telegram_bot_token=None, telegram_chat_id=None):
     """
     统一推送接口
     """
@@ -57,7 +57,7 @@ def push(content, method=os.getenv("pushplus", "将此处修改为/telegram"), p
     
     if method == "pushplus":
         if not pushplus_token:
-            pushplus_token = os.getenv("PUSHPLUS_TOKEN", "YOUR_PUSHPLUS_TOKEN")   # 替换为你的PushPlus token
+            pushplus_token = os.getenv("PUSHPLUS_TOKEN", "SCT265376TRNcuUaqhnEwPylz6lxaLukBM")   # 替换为你的PushPlus token
         return notifier.push_pushplus(content, pushplus_token)
     
     elif method == "telegram":
